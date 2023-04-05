@@ -20,7 +20,7 @@
         <h2>Top Navigation Example</h2>
       </div>
 
-      <div class="w3-container">
+      <form class="w3-container">
         <h2>List users Table</h2>
       
         <table class="w3-table-all w3-hoverable">
@@ -39,9 +39,16 @@
                      <td><%= dataUsers[i].firstName %></td>
                      <td><%= dataUsers[i].lastName %></td>
                      <td>
+                      <div>
                         <a href="detail/user/<%= dataUsers[i].id%>">Detail</a>
-                        <button type="button">Edit</button>
-                        <button type="button">Delete</button>
+                        <form action="/delete-user" method="POST">
+                          <input name="id" type="text" hidden value=<%= dataUsers[i].id%>>
+                          <button type="submit">Delete</button>
+                        </form>
+                        <form action="/edit-user/<%= dataUsers[i].id%>" method="get">
+                          <button type="submit">Edit</button>
+                      </form>
+                      </div>
                      </td>
                    </tr>
          <% } %>

@@ -17,7 +17,7 @@ const getDetailPage = async (req, res) => {
 
 const createNewUser = async (req, res) => {
   const { firstName, lastName, email, address } = req.body;
-
+  console.log(req.body);
   await connection
     .promise()
     .execute(
@@ -27,4 +27,40 @@ const createNewUser = async (req, res) => {
   return res.redirect("/");
 };
 
-export { getHomepage, getDetailPage, createNewUser };
+const deleteUser = async (req, res) => {
+  await connection
+    .promise()
+    .execute("delete from users where id = ?", [req.body.id]);
+  return res.redirect("/");
+};
+
+const editUser = async (req, res) => {
+  const userId = req.params.userId;
+  console.log(userId);
+  const [user] = await connection
+    .promise()
+    .execute("select * from users where id = ?", [userId]);
+  res.render("update.ejs", { dataUser: user[0] });
+};
+
+const updateUser = async (req, res) => {
+  const id = req.params.userId;
+
+  const { lastName, firstName, email, address } = req.body;
+  await connection
+    .promise()
+    .execute(
+      "update users set firstName = ?, lastName = ?, email = ?, address = ? where id = ?",
+      [firstName, lastName, email, address, id]
+    );
+  return res.redirect("/");
+};
+
+export {
+  getHomepage,
+  getDetailPage,
+  createNewUser,
+  deleteUser,
+  editUser,
+  updateUser,
+};
